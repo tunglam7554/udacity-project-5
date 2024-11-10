@@ -89,5 +89,6 @@ class Actors(db.Model):
             'id': self.id,
             'name': self.name,
             'age': self.age,
-            'gender': self.gender
+            'gender': self.gender,
+            'movie_id': self.movie_id
         }

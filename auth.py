@@ -3,10 +3,11 @@ from flask import request
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
+import config
 
-AUTH0_DOMAIN = 'dev-cpow2e2hthall7yb.us.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'capstone'
+AUTH0_DOMAIN = config.AUTH0_DOMAIN
+API_AUDIENCE = config.API_AUDIENCE
+ALGORITHMS = [config.ALGORITHMS]
 
 ## AuthError Exception
 class AuthError(Exception):

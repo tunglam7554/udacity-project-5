@@ -10,7 +10,13 @@ def create_app(is_drop=False):
     app = Flask(__name__)
     setup_db(app, is_drop=is_drop)
     CORS(app)
-   
+    
+    @app.after_request
+    def after_request(response):
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+        response.headers.add('Access-Control-Allow-Headers', 'GET, POST, PATCH, DELETE, OPTIONS')
+        return response
+    
     # Controller
     @app.route('/movies') 
     @requires_auth('get:movies')
@@ -208,28 +214,32 @@ def create_app(is_drop=False):
     def auth_error(error):
         return jsonify({
             "success": False,
-            "message": error.error.get('description')
+            "message": error.error.get('description'),
+            "error": error.status_code
         }), error.status_code
 
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
+            "success": False,
             "message": error.description if error.description else "Bad request",
-            "success": False
+            "error": 400
         }), 400
     
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
+            "success": False,
             "message": error.description if error.description else "Resource not found",
-            "success": False
+            "error": 404
         }), 404
 
     @app.errorhandler(500)
     def internal_error(error):
         return jsonify({
+            "success": False,
             "message": error.description if error.description else "Internal server error",
-            "success": False
+            "error": 500
         }), 500
 
     return app
@@ -237,4 +247,4 @@ def create_app(is_drop=False):
 APP = create_app()
 
 if __name__ == '__main__':
-    APP.run(host='0.0.0.0', port=8080, debug=True)
+    APP.run(host='0.0.0.0', port=5000, debug=True)
