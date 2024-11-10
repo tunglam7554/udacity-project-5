@@ -137,9 +137,10 @@ def create_app(is_drop=False):
         name=body.get('name', None)
         age=body.get('age', None)
         gender=body.get('gender', None)
+        movie_id=body.get('movie_id', None)
         if body is None or name is None or age is None or gender is None:
             abort(400, "Missing required fields")
-        new_actor = Actors(name=name, age=age, gender=gender)
+        new_actor = Actors(name=name, age=age, gender=gender, movie_id=movie_id)
 
         try:
             db.session.add(new_actor)
@@ -170,6 +171,8 @@ def create_app(is_drop=False):
             actor.age = body.get('age')
         if 'gender' in body:
             actor.gender = body.get('gender')
+        if 'movie_id' in body:
+            actor.movie_id = body.get('movie_id')
         
         try:
             db.session.commit()
